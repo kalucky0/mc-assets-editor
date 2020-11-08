@@ -136,6 +136,10 @@ table {
 }
 
 #tiler-textures {
+    max-height: calc(100vh - 170px);
+    min-height: min-content;
+    overflow-y: scroll;
+
     img {
         width: calc(20% - 21px);
         margin: 5px;

@@ -1,18 +1,18 @@
-const menuItems = document.querySelectorAll(".sidebar-sticky .nav-link");
-const darkmodeToggle = document.querySelector("#darkmode-toggle");
-const languageSelector = document.querySelector("#langSel");
-const buttons = document.querySelector("#buttons-bar");
-const screens = document.querySelectorAll(".screen");
+const darkmodeToggle = $("#darkmode-toggle").first();
 const ipcRenderer = require('electron').ipcRenderer;
-const content = document.querySelector("#content");
-const title = document.querySelector("#title");
+const menuItems = $(".sidebar-sticky .nav-link");
+const languageSelector = $("#langSel").first();
+const buttons = $("#buttons-bar").first();
 const lazyLoadInstance = new LazyLoad();
+const content = $("#content").first();
+const title = $("#title").first();
+const screens = $(".screen");
 let isShiftPressed = false;
 let tiledTextures = [0];
 let textures = [];
 feather.replace();
 
-ipcRenderer.on('textures-data', function (event, data) {
+ipcRenderer.on('textures-data', (event, data) => {
     textures = data;
     onHashChange();
 });
@@ -26,7 +26,7 @@ window.onkeyup = e => {
     if (e.key === "Shift") isShiftPressed = false;
 };
 
-darkmodeToggle.onclick = () => document.querySelector("html").classList.toggle("darkmode");
+darkmodeToggle.on( "click", () => $("html").first().toggleClass("darkmode"));
 
 if (location.hash === "") location.hash = "#languages";
 onHashChange();
@@ -34,38 +34,38 @@ onHashChange();
 function onHashChange() {
     switch (location.hash) {
         case "#languages":
-            title.innerHTML = "Languages Editor";
+            title.html("Languages Editor");
             setMenu(0);
             setScreen(0);
             break;
         case "#recipes":
-            title.innerHTML = "Recipes Editor";
+            title.html("Recipes Editor");
             setMenu(1);
             setScreen(1);
             break;
         case "#blockstates":
-            title.innerHTML = "Blockstates Editor";
+            title.html("Blockstates Editor");
             setMenu(2);
             setScreen(2);
             break;
         case "#models":
-            title.innerHTML = "Model Viewer";
+            title.html("Model Viewer");
             setMenu(3);
             setScreen(3);
             break;
         case "#items":
-            title.innerHTML = "Item Viewer";
+            title.html("Item Viewer");
             setMenu(4);
             setScreen(4);
             break;
         case "#viewer":
-            title.innerHTML = "Texture Viewer";
+            title.html("Texture Viewer");
             setMenu(5);
             setScreen(5);
             viewTextures();
             break;
         case "#tiler":
-            title.innerHTML = "Texture Tiler";
+            title.html("Texture Tiler");
             setMenu(6);
             setScreen(6);
             viewTiler();
@@ -74,82 +74,81 @@ function onHashChange() {
 }
 
 function setMenu(item) {
-    languageSelector.style.display = item === 0 ? "" : "none";
     for (let i = 0; i < menuItems.length; i++) {
         if (i === item)
-            menuItems[i].className += " active";
+            menuItems.eq(i).addClass("active");
         else
-            menuItems[i].className = menuItems[i].className.replace(/\bactive\b/g, "");
+            menuItems.eq(i).removeClass("active");
     }
 }
 
 function setScreen(screen) {
-    content.innerHTML = screens[screen].innerHTML;
+    content.html(screens.eq(screen).html());
 }
 
 function viewTextures() {
-    buttons.innerHTML = '';
-    const viewtxt = document.querySelector("#view-txt");
+    buttons.empty();
+    const viewtxt = $("#view-txt").first();
     console.log(textures[0]);
-    viewtxt.innerHTML = '';
+    viewtxt.empty();
     for (let i = 0; i < textures.length; i++) {
         let namespace = textures[i].path.match(/assets(\/|\\)(.*?)(\/|\\)/)[2];
         let type = textures[i].path.split(/(\/|\\)/);
         type = type[type.length - 3];
-        viewtxt.innerHTML += `<tr>
+        viewtxt.append(`<tr>
                 <td><img class="lazy" data-src="${textures[i].path}"></td>
                 <td>${namespace}</td>
                 <td>${textures[i].name}</td>
-                <td>${type}</td></tr>`;
+                <td>${type}</td></tr>`);
     }
     lazyLoadInstance.update();
 }
 
 function viewTiler() {
-    buttons.innerHTML = `<button class="btn btn-sm btn-outline-secondary" onclick="shuffleTiles()">Shuffle</button>`;
-    buttons.innerHTML += `<button class="btn btn-sm btn-outline-secondary" onclick="rotateTiles()">Randomize rotation</button>`;
-    const viewtxt = document.querySelector("#tiler-textures");
-    viewtxt.innerHTML = '';
+    buttons.html(`<button class="btn btn-sm btn-outline-secondary" onclick="shuffleTiles()">Shuffle</button>
+    <button class="btn btn-sm btn-outline-secondary" onclick="rotateTiles()">Randomize rotation</button>`);
+    const viewtxt = $("#tiler-textures").first();
+    viewtxt.empty();
     for (let i = 0; i < textures.length; i++) {
         let type = textures[i].path.split(/(\/|\\)/);
         type = type[type.length - 3];
         if (type !== "block") continue;
-        viewtxt.innerHTML += `<img data-src="${textures[i].path}" class="lazy" onclick="chooseBlock(${i})">`;
+        viewtxt.append(`<img data-src="${textures[i].path}" class="lazy" onclick="chooseBlock(${i})">`);
     }
     lazyLoadInstance.update();
 }
 
 function chooseBlock(i) {
-    const tiler = document.querySelector("#tiler");
-    tiler.innerHTML = '';
+    const tiler = $("#tiler").first();
+    tiler.empty();
     if (isShiftPressed) {
         tiledTextures.push(i);
         for (let j = 0; j < 9; j++) {
             let r = tiledTextures[Math.floor(Math.random() * tiledTextures.length)];
-            tiler.innerHTML += `<img src="${textures[r].path}">`;
+            tiler.append(`<img src="${textures[r].path}">`);
         }
     } else {
         tiledTextures = [];
         tiledTextures.push(i);
         for (let j = 0; j < 9; j++)
-            tiler.innerHTML += `<img src="${textures[i].path}">`;
+            tiler.append(`<img src="${textures[i].path}">`);
     }
 }
 
 function shuffleTiles() {
-    const tiler = document.querySelector("#tiler");
-    tiler.innerHTML = '';
+    const tiler = $("#tiler").first();
+    tiler.empty();
     for (let j = 0; j < 9; j++) {
         let r = tiledTextures[Math.floor(Math.random() * tiledTextures.length)];
-        tiler.innerHTML += `<img src="${textures[r].path}">`;
+        tiler.append(`<img src="${textures[r].path}">`);
     }
 }
 
 function rotateTiles() {
-    const tiler = document.querySelector("#tiler");
-    tiler.innerHTML = '';
+    const tiler = $("#tiler").first();
+    tiler.empty();
     for (let j = 0; j < 9; j++) {
         let r = tiledTextures[Math.floor(Math.random() * tiledTextures.length)];
-        tiler.innerHTML += `<img src="${textures[r].path}" style="transform: rotate(${((Math.floor(Math.random() * 4)) * 90)}deg);">`;
+        tiler.append(`<img src="${textures[r].path}" style="transform: rotate(${((Math.floor(Math.random() * 4)) * 90)}deg);">`);
     }
 }
