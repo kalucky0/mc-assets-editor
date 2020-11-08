@@ -8,11 +8,14 @@ const {
 } = require("path");
 const electron = require('electron').remote;
 const getAppDataPath = require("appdata-path").default;
+console.log(electron);
 
 async function generateHTML(texture) {
     console.log(join(__dirname, "./views/templates/textureViewer.html"))
-    readFile(join(__dirname, "./views/templates/textureViewer.html"), {encoding: 'utf-8'}, (err, html) => {
-        if(err) return;
+    readFile(join(__dirname, "./views/templates/textureViewer.html"), {
+        encoding: 'utf-8'
+    }, (err, html) => {
+        if (err) return;
         html = html.replace("%textureName0%", texture.name);
         html = html.replace("%textureName1%", texture.name);
         html = html.replace("%textureSource%", texture.path);
@@ -29,8 +32,6 @@ async function generateHTML(texture) {
             tempViewWindow.show();
         });
     });
-
-
 }
 
 module.exports = generateHTML;
