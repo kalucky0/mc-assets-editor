@@ -1,5 +1,7 @@
 const darkmodeToggle = $("#darkmode-toggle").first();
 const ipcRenderer = require('electron').ipcRenderer;
+const electron = require('electron').remote;
+const generateHTML = require('./src/textureSingleView');
 const menuItems = $(".sidebar-sticky .nav-link");
 const languageSelector = $("#language-selector").first();
 const buttons = $("#buttons-bar").first();
@@ -102,13 +104,27 @@ function viewTextures() {
         let namespace = textures[i].path.match(/assets(\/|\\)(.*?)(\/|\\)/)[2];
         let type = textures[i].path.split(/(\/|\\)/);
         type = type[type.length - 3];
-        viewtxt.append(`<tr>
+        viewtxt.append(`<tr id="textureListItem-${i}">
                 <td><img class="lazy" data-src="${textures[i].path}"></td>
                 <td>${namespace}</td>
                 <td>${textures[i].name}</td>
                 <td>${type}</td></tr>`);
     }
     lazyLoadInstance.update();
+
+    for (let i = 0; i < textures.length; i++) {
+        $(`#textureListItem-${i}`).hover(
+            function () {
+                $(this).css("background-color","#aad3ff");
+            }, 
+            function () {
+                $(this).css("background-color","");
+            }
+        );
+        $(`#textureListItem-${i}`).on('click', async () => {
+            await generateHTML(textures[i])           
+        });
+    }
 }
 
 function viewTiler() {

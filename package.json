@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.5.4",
+    "appdata-path": "^1.0.0",
     "bootstrap": "^4.5.3",
     "directory-tree": "^2.2.5",
     "feather-icons": "^4.28.0",
