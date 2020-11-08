@@ -1,6 +1,8 @@
-var electron = require("electron");
-var path = require("path");
-const filePath = __dirname;
+const electron = require("electron");
+const path = require("path");
+const dirTree = require("directory-tree");
+let resourcesPath;
+let textures = [];
 
 function createWindow() {
     var mainWindow = new electron.BrowserWindow({
@@ -12,6 +14,18 @@ function createWindow() {
     });
     mainWindow.loadFile(path.join(__dirname, "../index.html"));
     mainWindow.webContents.openDevTools();
+
+    const tree = dirTree(resourcesPath);
+    if (tree.children.some(e => e.name == "assets")) {
+        dirTree(path.join(resourcesPath, "assets"), { extensions: /(\.png)|(\.jpg)/ }, null, (item, PATH, stats) => {
+            textures = textures.concat(item.children);
+        });
+        textures = textures.filter(e => e.type == "file");
+        console.log(textures);
+    }
+    if (tree.children.some(e => e.name == "data")) {
+
+    }
 }
 
 electron.app.on("ready", function () {
@@ -19,6 +33,7 @@ electron.app.on("ready", function () {
         properties: ['openDirectory']
     }).then((a) => {
         if (a.canceled) electron.app.quit();
+        resourcesPath = a.filePaths[0];
         createWindow();
         electron.app.on("activate", function () {
             if (electron.BrowserWindow.getAllWindows().length === 0)
@@ -32,3 +47,9 @@ electron.app.on("window-all-closed", function () {
         electron.app.quit();
     }
 });
+
+function flatten(arr) {
+    return arr.reduce(function (flat, toFlatten) {
+        return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
+    }, []);
+}
