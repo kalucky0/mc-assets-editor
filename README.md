@@ -12,6 +12,7 @@ A handy tool to speed up your modding workflow. Allows you to view all textures 
 - [ ] Lang files editor
 - [ ] Recipes editor
 - [ ] Blockstates editor
+- [ ] Advancement Editor/Generator
 - [ ] Model viewer
 - [ ] Item viewer
 - [ ] Sorting textures by namespace

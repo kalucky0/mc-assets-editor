@@ -1,6 +1,8 @@
 const electron = require("electron");
 const path = require("path");
 const dirTree = require("directory-tree");
+const { mkdirSync, copyFileSync } = require("fs");
+const { default: getAppDataPath } = require("appdata-path");
 let resourcesPath;
 let textures = [];
 let json = [];
@@ -19,6 +21,7 @@ function createWindow() {
         minWidth: 1020
     });
     mainWindow.loadFile(path.join(__dirname, "../index.html"));
+    mainWindow.setMenuBarVisibility(false);
     mainWindow.webContents.openDevTools();
 
     const tree = dirTree(resourcesPath);
@@ -47,8 +50,12 @@ function createWindow() {
 }
 
 electron.app.on("ready", function () {
+    mkdirSync(getAppDataPath('mc-asset-editor') + "/cache/dist", {recursive: true});
+    copyFileSync(path.join(__dirname, "../node_modules/jquery/dist/jquery.js"), getAppDataPath('mc-asset-editor') + "/cache/dist/jquery.js");
+    copyFileSync(path.join(__dirname, "../node_modules/bootstrap/dist/js/bootstrap.js"), getAppDataPath('mc-asset-editor') + "/cache/dist/bootstrap.js");
     electron.dialog.showOpenDialog({
-        properties: ['openDirectory']
+        properties: ['openDirectory'],
+        title: "Select Resource folder.",     
     }).then((a) => {
         if (a.canceled) electron.app.quit();
         resourcesPath = a.filePaths[0];
