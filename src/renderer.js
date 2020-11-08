@@ -93,7 +93,7 @@ function viewTextures() {
         let type = textures[i].path.split(/(\/|\\)/);
         type = type[type.length - 3];
         viewtxt.innerHTML += `<tr>
-                <td><img src="${textures[i].path}"></td>
+                <td><img pic-src="${textures[i].path}"></td>
                 <td>${namespace}</td>
                 <td>${textures[i].name}</td>
                 <td>${type}</td></tr>`;
@@ -104,16 +104,13 @@ function viewTiler() {
     buttons.innerHTML = `<button class="btn btn-sm btn-outline-secondary" onclick="shuffleTiles()">Shuffle</button>`;
     buttons.innerHTML += `<button class="btn btn-sm btn-outline-secondary" onclick="rotateTiles()">Randomize rotation</button>`;
     const viewtxt = document.querySelector("#tiler-textures");
-
-    // TODO: Show textures from directory
-    /*
-            textures = e;
-            viewtxt.innerHTML = '';
-            for (let i = 0; i < e.length; i++) {
-                if (e[i].t !== "block") continue;
-                viewtxt.innerHTML += `<img src="https://kalucky.b-cdn.net${e[i].p}/${e[i].n}" onclick="chooseBlock(${i})">`;
-            }
-        */
+    viewtxt.innerHTML = '';
+    for (let i = 0; i < textures.length; i++) {
+        let type = textures[i].path.split(/(\/|\\)/);
+        type = type[type.length - 3];
+        if (type !== "block") continue;
+        viewtxt.innerHTML += `<img src="${textures[i].path}" onclick="chooseBlock(${i})">`;
+    }
 }
 
 function chooseBlock(i) {
@@ -123,13 +120,13 @@ function chooseBlock(i) {
         tiledTextures.push(i);
         for (let j = 0; j < 9; j++) {
             let r = tiledTextures[Math.floor(Math.random() * tiledTextures.length)];
-            tiler.innerHTML += `<img src="${textures[r].p}/${textures[r].n}">`;
+            tiler.innerHTML += `<img src="${textures[r].path}">`;
         }
     } else {
         tiledTextures = [];
         tiledTextures.push(i);
         for (let j = 0; j < 9; j++)
-            tiler.innerHTML += `<img src="${textures[i].p}/${textures[i].n}">`;
+            tiler.innerHTML += `<img src="${textures[i].path}">`;
     }
 }
 
@@ -138,7 +135,7 @@ function shuffleTiles() {
     tiler.innerHTML = '';
     for (let j = 0; j < 9; j++) {
         let r = tiledTextures[Math.floor(Math.random() * tiledTextures.length)];
-        tiler.innerHTML += `<img src="${textures[r].p}/${textures[r].n}">`;
+        tiler.innerHTML += `<img src="${textures[r].path}">`;
     }
 }
 
@@ -147,6 +144,6 @@ function rotateTiles() {
     tiler.innerHTML = '';
     for (let j = 0; j < 9; j++) {
         let r = tiledTextures[Math.floor(Math.random() * tiledTextures.length)];
-        tiler.innerHTML += `<img src="${textures[r].p}/${textures[r].n}" style="transform: rotate(${((Math.floor(Math.random() * 4)) * 90)}deg);">`;
+        tiler.innerHTML += `<img src="${textures[r].path}" style="transform: rotate(${((Math.floor(Math.random() * 4)) * 90)}deg);">`;
     }
 }
