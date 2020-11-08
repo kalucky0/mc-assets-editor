@@ -2,12 +2,17 @@ const menuItems = document.querySelectorAll(".sidebar-sticky .nav-link");
 const languageSelector = document.querySelector("#langSel");
 const buttons = document.querySelector("#buttons-bar");
 const screens = document.querySelectorAll(".screen");
+const ipcRenderer = require('electron').ipcRenderer;
 const content = document.querySelector("#content");
 const title = document.querySelector("#title");
 let isShiftPressed = false;
 let tiledTextures = [0];
 let textures = [];
 feather.replace();
+
+ipcRenderer.on('textures-data', function (event, data) {
+    textures = data;
+});
 
 window.onhashchange = onHashChange;
 window.onkeydown = e => {
