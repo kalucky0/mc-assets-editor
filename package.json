@@ -1,0 +1,30 @@
+{
+  "name": "mc-assets-editor",
+  "version": "0.0.2",
+  "description": "Minecraft Assets Editor",
+  "main": "index.js",
+  "scripts": {
+    "build": "sass ./src/app.scss:./dist/app.css --style compressed",
+    "start": "npm run build && electron ./src/main.js"
+  },
+  "keywords": [
+    "minecraft",
+    "editor",
+    "fabric",
+    "forge",
+    "datapack",
+    "assets",
+    "resources"
+  ],
+  "author": "kalucky0",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^9.3.1"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.5.4",
+    "bootstrap": "^4.5.3",
+    "feather-icons": "^4.28.0",
+    "jquery": "^3.5.1"
+  }
+}
