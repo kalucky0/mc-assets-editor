@@ -1,8 +1,7 @@
 const languageSelector = $("#language-selector").first();
+const generateHTML = require('./src/textureSingleView');
 const darkmodeToggle = $("#darkmode-toggle").first();
 const ipcRenderer = require('electron').ipcRenderer;
-const electron = require('electron').remote;
-const generateHTML = require('./src/textureSingleView');
 const menuItems = $(".sidebar-sticky .nav-link");
 const languagesSelect = $("#languages").first();
 const buttons = $("#buttons-bar").first();
@@ -43,7 +42,6 @@ darkmodeToggle.on("click", () => $("html").first().toggleClass("darkmode"));
 $('body').on('click', '.external', (event) => {
     event.preventDefault();
     let link = event.target.href === undefined ? ($(event.target).parent().attr('href') === undefined ? $(event.target).parent().parent().attr('href') : $(event.target).parent().attr('href')) : event.target.href;
-    console.log(event.target);
     shell.openExternal(link);
 });
 
@@ -67,26 +65,31 @@ function onHashChange() {
             setMenu(2);
             setScreen(2);
             break;
-        case "#models":
-            title.html("Model Viewer");
+        case "#advancements":
+            title.html("Advancements Editor");
             setMenu(3);
             setScreen(3);
             break;
-        case "#items":
-            title.html("Item Viewer");
+        case "#models":
+            title.html("Model Viewer");
             setMenu(4);
             setScreen(4);
             break;
-        case "#viewer":
-            title.html("Texture Viewer");
+        case "#items":
+            title.html("Item Viewer");
             setMenu(5);
             setScreen(5);
+            break;
+        case "#viewer":
+            title.html("Texture Viewer");
+            setMenu(6);
+            setScreen(6);
             viewTextures();
             break;
         case "#tiler":
             title.html("Texture Tiler");
-            setMenu(6);
-            setScreen(6);
+            setMenu(7);
+            setScreen(7);
             viewTiler();
             break;
     }
@@ -105,7 +108,6 @@ function setScreen(screen) {
 function viewTextures() {
     buttons.empty();
     const viewtxt = $("#view-txt").first();
-    console.log(textures[0]);
     viewtxt.empty();
     for (let i = 0; i < textures.length; i++) {
         let namespace = textures[i].path.match(/assets(\/|\\)(.*?)(\/|\\)/)[2];
@@ -120,16 +122,8 @@ function viewTextures() {
     lazyLoadInstance.update();
 
     for (let i = 0; i < textures.length; i++) {
-        $(`#textureListItem-${i}`).hover(
-            function () {
-                $(this).css("background-color","#aad3ff");
-            }, 
-            function () {
-                $(this).css("background-color","");
-            }
-        );
         $(`#textureListItem-${i}`).on('click', async () => {
-            await generateHTML(textures[i])           
+            await generateHTML(textures[i])
         });
     }
 }
@@ -184,8 +178,7 @@ function rotateTiles() {
 }
 
 function editLanguages() {
-    if(languageFiles.length == 0) return;
-    console.log(languageFiles);
+    if (languageFiles.length == 0) return;
     languagesSelect.empty();
     for (let i = 0; i < languageFiles.length; i++) {
         languagesSelect.append(`<a class="dropdown-item clickable" onclick="chooseLanguage(${i})"><img src="https://www.countryflags.io/${languageFiles[i].name.match(/_(.*?)\./)[1]}/flat/16.png">${ISO6391.getName(languageFiles[i].name.split('_')[0])}</a>`);
@@ -198,9 +191,8 @@ function chooseLanguage(i) {
     entries.empty();
     $("#dropdownMenuButton span").text(`${ISO6391.getName(languageFiles[i].name.split('_')[0])} (${languageFiles[i].name.split('.')[0]})`);
     fetch(languageFiles[i].path).then(e => e.json()).then(e => {
-        if(defaultLanguage == null) defaultLanguage = e;
-        for(let i in e) {
-            console.log(i);
+        if (defaultLanguage == null) defaultLanguage = e;
+        for (let i in e) {
             const path = i.split(".");
             entries.append(`<tr>
             <td>${path[0]}</td>
