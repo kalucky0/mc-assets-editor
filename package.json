@@ -31,6 +31,7 @@
     "iso-639-1": "^2.1.4",
     "jquery": "^3.5.1",
     "pretty-bytes": "^5.4.1",
+    "open": "^7.3.0",
     "vanilla-lazyload": "^17.1.3"
   }
 }
