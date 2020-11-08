@@ -7,6 +7,8 @@ let json = [];
 
 function createWindow() {
     var mainWindow = new electron.BrowserWindow({
+        title: "Minecraft Assets Editor",
+        icon:  path.join(__dirname, "../icon.ico"),
         height: 720,
         minHeight: 600,
         webPreferences: {
