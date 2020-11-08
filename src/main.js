@@ -25,10 +25,8 @@ function createWindow() {
             textures = textures.concat(item.children);
         });
         textures = textures.filter(e => e.type == "file");
-        mainWindow.webContents.once('did-finish-load', () => {
-            mainWindow.webContents.send('textures-data', textures);
-            console.log(textures);
-        });
+        mainWindow.webContents.once('did-finish-load', () =>
+            mainWindow.webContents.send('textures-data', textures));
     }
     if (tree.children.some(e => e.name == "data")) {
 

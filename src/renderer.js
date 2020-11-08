@@ -12,6 +12,7 @@ feather.replace();
 
 ipcRenderer.on('textures-data', function (event, data) {
     textures = data;
+    onHashChange();
 });
 
 window.onhashchange = onHashChange;
@@ -85,18 +86,18 @@ function setScreen(screen) {
 function viewTextures() {
     buttons.innerHTML = '';
     const viewtxt = document.querySelector("#view-txt");
-    // TODO: Show textures from directory
-    /*
-        textures = e;
-        viewtxt.innerHTML = '';
-        for (let i = 0; i < e.length; i++) {
-            viewtxt.innerHTML += `<tr>
-                <td><img src="https://kalucky.b-cdn.net${e[i].p}/${e[i].n}"></td>
-                <td>${e[i].n}</td>
-                <td>${e[i].t}</td>
-                <td>${e[i].a}</td></tr>`;
-        }
-    */
+    console.log(textures[0]);
+    viewtxt.innerHTML = '';
+    for (let i = 0; i < textures.length; i++) {
+        let namespace = textures[i].path.match(/assets(\/|\\)(.*?)(\/|\\)/)[2];
+        let type = textures[i].path.split(/(\/|\\)/);
+        type = type[type.length - 3];
+        viewtxt.innerHTML += `<tr>
+                <td><img src="${textures[i].path}"></td>
+                <td>${namespace}</td>
+                <td>${textures[i].name}</td>
+                <td>${type}</td></tr>`;
+    }
 }
 
 function viewTiler() {
