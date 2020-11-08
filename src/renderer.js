@@ -5,6 +5,7 @@ const screens = document.querySelectorAll(".screen");
 const ipcRenderer = require('electron').ipcRenderer;
 const content = document.querySelector("#content");
 const title = document.querySelector("#title");
+const lazyLoadInstance = new LazyLoad();
 let isShiftPressed = false;
 let tiledTextures = [0];
 let textures = [];
@@ -93,11 +94,12 @@ function viewTextures() {
         let type = textures[i].path.split(/(\/|\\)/);
         type = type[type.length - 3];
         viewtxt.innerHTML += `<tr>
-                <td><img pic-src="${textures[i].path}"></td>
+                <td><img class="lazy" data-src="${textures[i].path}"></td>
                 <td>${namespace}</td>
                 <td>${textures[i].name}</td>
                 <td>${type}</td></tr>`;
     }
+    lazyLoadInstance.update();
 }
 
 function viewTiler() {
@@ -109,8 +111,9 @@ function viewTiler() {
         let type = textures[i].path.split(/(\/|\\)/);
         type = type[type.length - 3];
         if (type !== "block") continue;
-        viewtxt.innerHTML += `<img src="${textures[i].path}" onclick="chooseBlock(${i})">`;
+        viewtxt.innerHTML += `<img data-src="${textures[i].path}" class="lazy" onclick="chooseBlock(${i})">`;
     }
+    lazyLoadInstance.update();
 }
 
 function chooseBlock(i) {
