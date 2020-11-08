@@ -7,6 +7,7 @@ const {
     join
 } = require("path");
 const electron = require('electron').remote;
+const prettyBytes = require('pretty-bytes');
 const getAppDataPath = require("appdata-path").default;
 console.log(electron);
 
@@ -19,7 +20,7 @@ async function generateHTML(texture) {
         html = html.replace("%textureName0%", texture.name);
         html = html.replace("%textureName1%", texture.name);
         html = html.replace("%textureSource%", texture.path);
-        html = html.replace("%textureInfo%", `${texture.path} <br> ${texture.size} bytes <br> ${texture.extension.replace(".", "")}`);
+        html = html.replace("%textureInfo%", `<strong>Path:</strong>&nbsp;<code>${texture.path}</code><br><strong>Size:</strong>&nbsp;${prettyBytes(texture.size)}<br><strong>Type:</strong>&nbsp;${texture.extension.replace(".", "")}`);
         mkdirSync(getAppDataPath('mc-asset-editor') + `/cache/`, {
             recursive: true
         });

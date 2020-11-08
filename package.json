@@ -30,6 +30,7 @@
     "feather-icons": "^4.28.0",
     "iso-639-1": "^2.1.4",
     "jquery": "^3.5.1",
+    "pretty-bytes": "^5.4.1",
     "vanilla-lazyload": "^17.1.3"
   }
 }
