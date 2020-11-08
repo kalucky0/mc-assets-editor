@@ -1,4 +1,5 @@
 const menuItems = document.querySelectorAll(".sidebar-sticky .nav-link");
+const darkmodeToggle = document.querySelector("#darkmode-toggle");
 const languageSelector = document.querySelector("#langSel");
 const buttons = document.querySelector("#buttons-bar");
 const screens = document.querySelectorAll(".screen");
@@ -24,6 +25,8 @@ window.onkeydown = e => {
 window.onkeyup = e => {
     if (e.key === "Shift") isShiftPressed = false;
 };
+
+darkmodeToggle.onclick = () => document.querySelector("html").classList.toggle("darkmode");
 
 if (location.hash === "") location.hash = "#languages";
 onHashChange();

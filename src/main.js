@@ -7,15 +7,17 @@ let json = [];
 
 function createWindow() {
     var mainWindow = new electron.BrowserWindow({
-        height: 600,
+        height: 720,
+        minHeight: 600,
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
             nodeIntegration: true
         },
-        width: 800
+        width: 1100,
+        minWidth: 1020
     });
     mainWindow.loadFile(path.join(__dirname, "../index.html"));
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
 
     const tree = dirTree(resourcesPath);
     if (tree.children.some(e => e.name == "assets")) {

@@ -2,6 +2,7 @@
 
 body {
     font-size: .875rem;
+    user-select: none;
 }
 
 .feather {
@@ -139,4 +140,16 @@ table {
         width: calc(20% - 21px);
         margin: 5px;
     }
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+#darkmode-toggle svg:nth-child(2) {
+    display: none;
+}
+
+.darkmode {
+    @import "darkmode.scss";
 }
