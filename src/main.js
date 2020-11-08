@@ -8,7 +8,7 @@ let json = [];
 function createWindow() {
     var mainWindow = new electron.BrowserWindow({
         title: "Minecraft Assets Editor",
-        icon:  path.join(__dirname, "../icon.ico"),
+        icon: path.join(__dirname, "../icon.ico"),
         height: 720,
         minHeight: 600,
         webPreferences: {
@@ -19,7 +19,7 @@ function createWindow() {
         minWidth: 1020
     });
     mainWindow.loadFile(path.join(__dirname, "../index.html"));
-    // mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
 
     const tree = dirTree(resourcesPath);
     if (tree.children.some(e => e.name == "assets")) {
@@ -29,8 +29,17 @@ function createWindow() {
             textures = textures.concat(item.children);
         });
         textures = textures.filter(e => e.type == "file");
-        mainWindow.webContents.once('did-finish-load', () =>
+        mainWindow.webContents.on('did-finish-load', () =>
             mainWindow.webContents.send('textures-data', textures));
+
+        dirTree(path.join(resourcesPath, "assets"), {
+            extensions: /(\.json)/
+        }, null, (item, PATH, stats) => {
+            json = json.concat(item.children);
+        });
+        json = json.filter(e => e.type == "file");
+        mainWindow.webContents.on('did-finish-load', () =>
+            mainWindow.webContents.send('json-data', json));
     }
     if (tree.children.some(e => e.name == "data")) {
 

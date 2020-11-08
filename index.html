@@ -92,12 +92,9 @@
               <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span data-feather="globe"></span>
-                English
+                <span>English</span>
               </button>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton" id="languages">
-                <a class="dropdown-item" href="#">Polish</a>
-                <a class="dropdown-item" href="#">German</a>
-                <a class="dropdown-item" href="#">English</a>
               </div>
             </div>
           </div>
@@ -116,28 +113,12 @@
           <th>Type</th>
           <th>Namespace</th>
           <th>ID</th>
+          <th>Default</th>
           <th>Translation</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>block</td>
-          <td>the_aether</td>
-          <td>aether_dirt</td>
-          <td>Aether Dirt</td>
-        </tr>
-        <tr>
-          <td>block</td>
-          <td>the_aether</td>
-          <td>aether_grass</td>
-          <td>Aether Grass</td>
-        </tr>
-        <tr>
-          <td>item</td>
-          <td>the_aether</td>
-          <td>skyroot_sword</td>
-          <td>Skyroot Sword</td>
-        </tr>
+      <tbody id="lang-entries">
+        
       </tbody>
     </table>
   </div>
@@ -185,12 +166,11 @@
       </div>
     </div>
   </div>
-  <script src="./node_modules/jquery/dist/jquery.slim.js"></script>
   <script>window.jQuery = window.$ = require('jquery');</script>
-  <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="./node_modules/@popperjs/core/dist/umd/popper.js"></script>
+  <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="./node_modules/feather-icons/dist/feather.min.js"></script>
   <script src="./node_modules/vanilla-lazyload/dist/lazyload.min.js"></script>
+  <script src="./node_modules/iso-639-1/build/index.js"></script>
   <script src="./src/renderer.js"></script>
 </body>
 

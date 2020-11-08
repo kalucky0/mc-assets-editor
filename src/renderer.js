@@ -1,7 +1,8 @@
+const languageSelector = $("#language-selector").first();
 const darkmodeToggle = $("#darkmode-toggle").first();
 const ipcRenderer = require('electron').ipcRenderer;
 const menuItems = $(".sidebar-sticky .nav-link");
-const languageSelector = $("#language-selector").first();
+const languagesSelect = $("#languages").first();
 const buttons = $("#buttons-bar").first();
 const shell = require("electron").shell;
 const lazyLoadInstance = new LazyLoad();
@@ -9,12 +10,21 @@ const content = $("#content").first();
 const title = $("#title").first();
 const screens = $(".screen");
 let isShiftPressed = false;
+let defaultLanguage = null;
 let tiledTextures = [0];
+let languageFiles = [];
 let textures = [];
+let json = [];
 feather.replace();
 
 ipcRenderer.on('textures-data', (event, data) => {
     textures = data;
+    onHashChange();
+});
+
+ipcRenderer.on('json-data', (event, data) => {
+    json = data;
+    languageFiles = json.filter(e => e.path.includes("lang"));
     onHashChange();
 });
 
@@ -36,7 +46,6 @@ $('body').on('click', '.external', (event) => {
 });
 
 if (location.hash === "") location.hash = "#languages";
-onHashChange();
 
 function onHashChange() {
     switch (location.hash) {
@@ -44,6 +53,7 @@ function onHashChange() {
             title.html("Languages Editor");
             setMenu(0);
             setScreen(0);
+            editLanguages();
             break;
         case "#recipes":
             title.html("Recipes Editor");
@@ -81,12 +91,9 @@ function onHashChange() {
 }
 
 function setMenu(item) {
-    for (let i = 0; i < menuItems.length; i++) {
-        if (i === item)
-            menuItems.eq(i).addClass("active");
-        else
-            menuItems.eq(i).removeClass("active");
-    }
+    item === 0 ? languageSelector.show() : languageSelector.hide();
+    for (let i = 0; i < menuItems.length; i++)
+        i === item ? menuItems.eq(i).addClass("active") : menuItems.eq(i).removeClass("active");
 }
 
 function setScreen(screen) {
@@ -158,4 +165,34 @@ function rotateTiles() {
         let r = tiledTextures[Math.floor(Math.random() * tiledTextures.length)];
         tiler.append(`<img src="${textures[r].path}" style="transform: rotate(${((Math.floor(Math.random() * 4)) * 90)}deg);">`);
     }
+}
+
+function editLanguages() {
+    if(languageFiles.length == 0) return;
+    console.log(languageFiles);
+    languagesSelect.empty();
+    for (let i = 0; i < languageFiles.length; i++) {
+        languagesSelect.append(`<a class="dropdown-item clickable" onclick="chooseLanguage(${i})"><img src="https://www.countryflags.io/${languageFiles[i].name.match(/_(.*?)\./)[1]}/flat/16.png">${ISO6391.getName(languageFiles[i].name.split('_')[0])}</a>`);
+    }
+    chooseLanguage(languageFiles.findIndex(e => e.name.includes("en")));
+}
+
+function chooseLanguage(i) {
+    const entries = $("#lang-entries").first();
+    entries.empty();
+    $("#dropdownMenuButton span").text(`${ISO6391.getName(languageFiles[i].name.split('_')[0])} (${languageFiles[i].name.split('.')[0]})`);
+    fetch(languageFiles[i].path).then(e => e.json()).then(e => {
+        if(defaultLanguage == null) defaultLanguage = e;
+        for(let i in e) {
+            console.log(i);
+            const path = i.split(".");
+            entries.append(`<tr>
+            <td>${path[0]}</td>
+            <td>${path[1]}</td>
+            <td>${path[2]}</td>
+            <td>${defaultLanguage[i]}</td>
+            <td>${e[i]}</td>
+          </tr>`);
+        }
+    });
 }
