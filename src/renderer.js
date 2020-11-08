@@ -1,8 +1,9 @@
 const darkmodeToggle = $("#darkmode-toggle").first();
 const ipcRenderer = require('electron').ipcRenderer;
 const menuItems = $(".sidebar-sticky .nav-link");
-const languageSelector = $("#langSel").first();
+const languageSelector = $("#language-selector").first();
 const buttons = $("#buttons-bar").first();
+const shell = require("electron").shell;
 const lazyLoadInstance = new LazyLoad();
 const content = $("#content").first();
 const title = $("#title").first();
@@ -26,7 +27,13 @@ window.onkeyup = e => {
     if (e.key === "Shift") isShiftPressed = false;
 };
 
-darkmodeToggle.on( "click", () => $("html").first().toggleClass("darkmode"));
+darkmodeToggle.on("click", () => $("html").first().toggleClass("darkmode"));
+$('body').on('click', '.external', (event) => {
+    event.preventDefault();
+    let link = event.target.href === undefined ? ($(event.target).parent().attr('href') === undefined ? $(event.target).parent().parent().attr('href') : $(event.target).parent().attr('href')) : event.target.href;
+    console.log(event.target);
+    shell.openExternal(link);
+});
 
 if (location.hash === "") location.hash = "#languages";
 onHashChange();
