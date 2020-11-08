@@ -7,6 +7,7 @@ const languagesSelect = $("#languages").first();
 const buttons = $("#buttons-bar").first();
 const shell = require("electron").shell;
 const path = require('path');
+const open = require('open');
 const lazyLoadInstance = new LazyLoad();
 const content = $("#content").first();
 const title = $("#title").first();
@@ -27,8 +28,9 @@ ipcRenderer.on('textures-data', (event, data) => {
 ipcRenderer.on('json-data', (event, data) => {
     json = data;
     languageFiles = json.filter(e => e.path.includes("lang"));
+    console.log(languageFiles)
     $('#open-lang-folder').on('click', () => {
-        shell.showItemInFolder(languageFiles[0]);
+        open("file://" + path.dirname(languageFiles[0].path));
     });
     onHashChange();
 });
