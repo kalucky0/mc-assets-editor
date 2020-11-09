@@ -4,6 +4,7 @@ let defaultLanguage = null;
 function editLanguages() {
     if (languageFiles.length == 0) return;
     languagesSelect.empty();
+    buttons.html(`<button class="btn btn-sm btn-outline-secondary" id="open-lang-folder">Open Languages Folder</button>`);
     for (let i = 0; i < languageFiles.length; i++) {
         languagesSelect.append(`<a class="dropdown-item clickable" onclick="chooseLanguage(${i})"><img src="https://www.countryflags.io/${languageFiles[i].name.match(/_(.*?)\./)[1]}/flat/16.png">${ISO6391.getName(languageFiles[i].name.split('_')[0])}</a>`);
     }

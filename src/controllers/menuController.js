@@ -18,6 +18,7 @@ function onHashChange() {
             title.html("Recipes Editor");
             setMenu(1);
             setScreen(1);
+            editRecipes();
             break;
         case "#blockstates":
             title.html("Blockstates Editor");
@@ -61,6 +62,7 @@ function setMenu(item) {
 }
 
 function setScreen(screen) {
+    buttons.empty();
     content.html(screens.eq(screen).html());
 }
 

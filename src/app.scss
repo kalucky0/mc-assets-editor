@@ -1,7 +1,7 @@
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
 
 ::-webkit-scrollbar {
-    background-color:rgb(146, 146, 146);
+    background-color: rgb(146, 146, 146);
     width: 8px;
     height: 16px;
 }
@@ -211,6 +211,196 @@ table {
         background-color: #aad3ff !important;
     }
 }
+
+#recipe-mc-blocks {
+    text-align: center;
+
+    img {
+        width: 100%;
+        height: auto;
+        max-width: 64px;
+        image-rendering: unset;
+        cursor: grab;
+    }
+}
+
+.crafting-holder {
+    flex-direction: column;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+    margin-top: 10px;
+    background: #c6c6c6;
+    border-color: #373737 #fff #fff #373737;
+    border-style: solid;
+    border-width: 2px;
+
+    .crafting {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        max-width: 230px;
+        margin: 0 auto;
+
+        .recipe {
+            display: flex;
+
+            .table-wrap {
+                display: flex;
+                flex-wrap: wrap;
+                max-width: 110px;
+            }
+        }
+
+        .arrow {
+            width: 32px;
+            height: 27px;
+            margin-left: 16px;
+            margin-right: 16px;
+            background-size: cover;
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAbCAAAAAA4rNJGAAAAQElEQVR42mM4hgG6u5F5DGQpQFZCrgKEEvIVwJRQogCihLCCbryAcgXd3ZQqIMYNlIcD7eKC0vRAaZqkNF+gAgA5zlZP3VSoCQAAAABJRU5ErkJggg==);
+        }
+
+        .flame {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 5px;
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkBAMAAAATLoWrAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABJQTFRF////i4uL2ExF/7YA//8f/////sQCSgAAAAF0Uk5TAEDm2GYAAAB3SURBVCjPrc7BDcUwCANQr+AVvIJX8Aref5V/SFtV+iGnIoHIQ6AAn4b+uw1Z10vmTPCTB1IIRCtHcrg24wOlXB9oOJJiAjHh+/6GXBFqeA33lBJwRDz3N9QacEn4QGq4tlONhJZIs5qJXBNuCdcjgeS7DPRZ/ABtDiv37uDbbgAAAABJRU5ErkJggg==);
+        }
+
+        .plus {
+            width: 26px;
+            height: 26px;
+            margin-left: 16px;
+            margin-right: 16px;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAAPElEQVRIx2P8//8/AzGgp6cHq8KSkhJGYvQzjlo0atGoRUPIou7ubuJsohCMWjRq0WiGHbVo1KJRi/AAAG4um58X3Ja9AAAAAElFTkSuQmCC);
+        }
+    }
+
+    .crafting.full {
+        max-width: 100%;
+    }
+}
+
+.vertical {
+    display: flex;
+    flex-direction: column;
+}
+
+.horizontal {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.grid {
+    position: relative;
+    display: block;
+    text-align: center !important;
+    background-color: #8b8b8b;
+    border-color: #373737 #fff #fff #373737;
+    border-style: solid;
+    border-width: 2px;
+    vertical-align: middle;
+    width: 36px;
+    height: 36px;
+
+    &:hover {
+        background-color: hsla(0, 0%, 100%, .4);
+    }
+
+    img {
+        cursor: move;
+    }
+}
+
+.grid-furnace {
+    position: relative;
+    display: block;
+    text-align: center !important;
+    background-color: #8b8b8b;
+    border-color: #373737 #fff #fff #373737;
+    border-style: solid;
+    border-width: 2px;
+    vertical-align: middle;
+    width: 36px;
+    height: 36px;
+
+    &:hover {
+        background-color: hsla(0, 0%, 100%, .4);
+    }
+
+    img {
+        cursor: move;
+    }
+}
+
+.grid-large {
+    position: relative;
+    display: block;
+    text-align: center !important;
+    background-color: #8b8b8b;
+    border-color: #373737 #fff #fff #373737;
+    border-style: solid;
+    border-width: 2px;
+    vertical-align: middle;
+    width: 48px;
+    height: 48px;
+
+    img {
+        z-index: -1;
+        margin-top: 8px;
+        cursor: move;
+    }
+
+    &:hover {
+        background-color: hsla(0, 0%, 100%, .4);
+    }
+}
+
+.crafting-table-output {
+    display: flex;
+}
+
+.crafting-table-output-count {
+    position: absolute;
+    bottom: 0;
+    right: 5%;
+    color: #fff;
+    font-family: Minecraft;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    pointer-events: none;
+}
+
+.recipe {
+    >h6 {
+        font-family: Minecraft;
+    }
+}
+
+.ingredients {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+    margin-top: 10px;
+    background: #c6c6c6;
+    border-color: #373737 #fff #fff #373737;
+    border-style: solid;
+    border-width: 2px;
+}
+
+@media screen and (max-device-width:400px) {
+    .crafting {
+        .arrow {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
+}
+
 
 .darkmode {
     @import "darkmode.scss";

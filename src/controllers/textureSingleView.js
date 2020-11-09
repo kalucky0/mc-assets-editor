@@ -1,18 +1,10 @@
-const {
-    readFile,
-    writeFile,
-    mkdirSync
-} = require("fs");
-const {
-    join
-} = require("path");
+const { readFile, writeFile, mkdirSync } = require("fs");
+const { join } = require("path");
 const electron = require('electron').remote;
 const prettyBytes = require('pretty-bytes');
 const getAppDataPath = require("appdata-path").default;
-console.log(electron);
 
 async function generateHTML(texture) {
-    console.log(join(__dirname, "../views/templates/textureViewer.html"))
     readFile(join(__dirname, "../views/templates/textureViewer.html"), {
         encoding: 'utf-8'
     }, (err, html) => {

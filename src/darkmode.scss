@@ -4642,3 +4642,17 @@ a.text-dark {
         background-color: #2b5e94 !important;
     }
 }
+
+.crafting-holder {
+    background: #393939;
+    border-color: #373737 #7b7b7b #7b7b7b #373737;
+
+    .crafting .arrow {
+        filter: invert(1);
+    }
+}
+
+.grid, .grid-large {
+    border-color: #373737 #7b7b7b #7b7b7b #373737;
+    background-color: #616161;
+}

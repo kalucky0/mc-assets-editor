@@ -18,7 +18,6 @@ ipcRenderer.on('textures-data', (event, data) => {
 ipcRenderer.on('json-data', (event, data) => {
     json = data;
     languageFiles = json.filter(e => e.path.includes("lang"));
-    console.log(languageFiles)
     $('#open-lang-folder').on('click', () => {
         open("file://" + path.dirname(languageFiles[0].path));
     });
