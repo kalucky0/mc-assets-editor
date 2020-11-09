@@ -18,8 +18,8 @@ function createWindow() {
             nodeIntegration: true,
             enableRemoteModule: true
         },
-        width: 1160,
-        minWidth: 1160
+        width: 1180,
+        minWidth: 1180
     });
     mainWindow.loadFile(path.join(__dirname, "../index.html"));
     mainWindow.setMenuBarVisibility(false);

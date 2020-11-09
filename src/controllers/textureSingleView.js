@@ -12,8 +12,8 @@ const getAppDataPath = require("appdata-path").default;
 console.log(electron);
 
 async function generateHTML(texture) {
-    console.log(join(__dirname, "./views/templates/textureViewer.html"))
-    readFile(join(__dirname, "./views/templates/textureViewer.html"), {
+    console.log(join(__dirname, "../views/templates/textureViewer.html"))
+    readFile(join(__dirname, "../views/templates/textureViewer.html"), {
         encoding: 'utf-8'
     }, (err, html) => {
         if (err) return;
