@@ -12,13 +12,13 @@ function onHashChange() {
             title.html("Languages Editor");
             setMenu(0);
             setScreen(0);
-            editLanguages();
+            LanguagesController.show();
             break;
         case "#recipes":
             title.html("Recipes Editor");
             setMenu(1);
             setScreen(1);
-            editRecipes();
+            RecipesController.show();
             break;
         case "#blockstates":
             title.html("Blockstates Editor");
@@ -34,24 +34,25 @@ function onHashChange() {
             title.html("Model Viewer");
             setMenu(4);
             setScreen(4);
+            ModelsController.init();
             break;
         case "#items":
             title.html("Item Viewer");
             setMenu(5);
             setScreen(5);
-            itemsInit();
+            ItemsController.init();
             break;
         case "#viewer":
             title.html("Texture Viewer");
             setMenu(6);
             setScreen(6);
-            viewTextures();
+            TexturesController.viewTextures();
             break;
         case "#tiler":
             title.html("Texture Tiler");
             setMenu(7);
             setScreen(7);
-            viewTiler();
+            TexturesController.viewTiler();
             break;
     }
 }
