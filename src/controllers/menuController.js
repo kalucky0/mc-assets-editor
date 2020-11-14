@@ -39,6 +39,7 @@ function onHashChange() {
             title.html("Item Viewer");
             setMenu(5);
             setScreen(5);
+            itemsInit();
             break;
         case "#viewer":
             title.html("Texture Viewer");
@@ -64,6 +65,10 @@ function setMenu(item) {
 function setScreen(screen) {
     buttons.empty();
     content.html(screens.eq(screen).html());
+}
+
+function sleep(ms) {
+    return new Promise(cb => setTimeout(cb, ms));
 }
 
 window.onhashchange = onHashChange;
