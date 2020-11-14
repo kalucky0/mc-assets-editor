@@ -46,6 +46,10 @@ body {
     user-select: none;
 }
 
+*:focus {
+    outline: none;
+}
+
 .feather {
     width: 16px;
     height: 16px;
@@ -399,6 +403,11 @@ table {
             margin-right: 0;
         }
     }
+}
+
+canvas {
+    width: 100% !important;
+    height: auto !important;
 }
 
 
