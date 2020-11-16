@@ -7,6 +7,12 @@ const screens = $(".screen");
 if (location.hash === "") {
     title.html("Minecraft Assets Editor");
     setScreen(10);
+
+    const recents = localStorage.recent === undefined ? [] : JSON.parse(localStorage.recent);
+    const recent = $("#recent-projects");
+    console.log(recents);
+    for(let i = 0; i < recents.length; i++)
+        recent.append(`<div class="col-md-3 card p-2 mr-1 clickable" onclick="openProject(${JSON.stringify(recents[i].path).replace(/\"/g, "'")})">${recents[i].name}</div>`);
 }
 
 function onHashChange() {

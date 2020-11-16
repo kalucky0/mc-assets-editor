@@ -3,7 +3,8 @@ const path = require("path");
 const dirTree = require("directory-tree");
 const {
     mkdirSync,
-    copyFileSync
+    copyFileSync,
+    readFileSync
 } = require("fs");
 const {
     default: getAppDataPath
@@ -45,14 +46,18 @@ electron.app.on("window-all-closed", () => {
         electron.app.quit();
 });
 
-electron.ipcMain.handle('open-project', async (event, someArgument) => {
-    const result = await electron.dialog.showOpenDialog({
-        properties: ['openDirectory'],
-        title: "Select Resource folder.",
-    });
+electron.ipcMain.handle('open-project', async (event, resourcesPath) => {
+    if (resourcesPath === undefined) {
+        const result = await electron.dialog.showOpenDialog({
+            properties: ['openDirectory'],
+            title: "Select Resource folder.",
+        });
 
-    if (result.canceled) return null;
-    const resourcesPath = result.filePaths[0];
+        if (result.canceled) return null;
+        resourcesPath = result.filePaths[0];
+    }
+
+    console.log(JSON.stringify(resourcesPath));
 
     const tree = dirTree(resourcesPath);
     if (tree.children.some(e => e.name == "assets")) {
@@ -74,7 +79,22 @@ electron.ipcMain.handle('open-project', async (event, someArgument) => {
 
     }
 
+    let name = undefined;
+    try {
+        name = JSON.parse(readFileSync(path.join(resourcesPath, "fabric.mod.json"))).name;
+    } catch (e) {
+        try {
+            name = readFileSync(path.join(resourcesPath, "mods.toml"), {
+                encoding: 'utf-8'
+            }).match(/displayName(.*?)"(.*?)"/);
+            name = name[name.length - 1];
+        } catch (e) {
+            return null;
+        }
+    }
     return {
+        name: name,
+        path: resourcesPath,
         json: json,
         textures: textures
     };

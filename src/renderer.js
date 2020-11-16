@@ -10,9 +10,9 @@ let textures = [];
 let json = [];
 feather.replace();
 
-function openProject() {
-    ipcRenderer.invoke('open-project').then((result) => {
-        if(result === null) return;
+function openProject(path = undefined) {
+    ipcRenderer.invoke('open-project', path).then((result) => {
+        if (result === null) return;
         textures = result.textures;
         json = result.json;
         languageFiles = json.filter(e => e.path.includes("lang"));
@@ -21,6 +21,15 @@ function openProject() {
         });
         window.onhashchange = onHashChange;
         location.hash = "#languages";
+
+        let recents = localStorage.recent === undefined ? [] : JSON.parse(localStorage.recent);
+        if (!recents.some(e => e.path == result.path)) {
+            recents.push({
+                name: result.name,
+                path: result.path
+            });
+        }
+        localStorage.recent = JSON.stringify(recents);
     });
 }
 
