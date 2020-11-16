@@ -10,19 +10,19 @@ let textures = [];
 let json = [];
 feather.replace();
 
-ipcRenderer.on('textures-data', (event, data) => {
-    textures = data;
-    onHashChange();
-});
-
-ipcRenderer.on('json-data', (event, data) => {
-    json = data;
-    languageFiles = json.filter(e => e.path.includes("lang"));
-    $('#open-lang-folder').on('click', () => {
-        open("file://" + path.dirname(languageFiles[0].path));
+function openProject() {
+    ipcRenderer.invoke('open-project').then((result) => {
+        if(result === null) return;
+        textures = result.textures;
+        json = result.json;
+        languageFiles = json.filter(e => e.path.includes("lang"));
+        $('#open-lang-folder').on('click', () => {
+            open("file://" + path.dirname(languageFiles[0].path));
+        });
+        window.onhashchange = onHashChange;
+        location.hash = "#languages";
     });
-    onHashChange();
-});
+}
 
 window.onkeydown = e => {
     if (e.key === "Shift") isShiftPressed = true;

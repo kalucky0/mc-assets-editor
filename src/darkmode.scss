@@ -4656,3 +4656,9 @@ a.text-dark {
     border-color: #373737 #7b7b7b #7b7b7b #373737;
     background-color: #616161;
 }
+
+.warning, .error, .info {
+    &:before {
+        border: 2px solid #1b1e1f;
+    }
+}

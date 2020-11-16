@@ -414,3 +414,32 @@ canvas {
 .darkmode {
     @import "darkmode.scss";
 }
+
+.warning, .error, .info {
+    position: relative;
+
+    &:before {
+        content: " ";
+        position: absolute;
+        background: #ff9800;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        z-index: 99;
+        top: 22px;
+        left: 26px;
+        border: 2px solid #f8f9fa;
+    }
+}
+
+.error {
+    &:before {
+        background: #f44336;
+    }
+}
+
+.info {
+    &:before {
+        background: #2196f3;
+    }
+}

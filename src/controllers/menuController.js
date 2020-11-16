@@ -4,54 +4,68 @@ const content = $("#content").first();
 const title = $("#title").first();
 const screens = $(".screen");
 
-if (location.hash === "") location.hash = "#languages";
+if (location.hash === "") {
+    title.html("Minecraft Assets Editor");
+    setScreen(10);
+}
 
 function onHashChange() {
     switch (location.hash) {
         case "#languages":
-            title.html("Languages Editor");
+            title.html("Language Editor");
             setMenu(0);
             setScreen(0);
             LanguagesController.show();
             break;
         case "#recipes":
-            title.html("Recipes Editor");
+            title.html("Recipe Editor");
             setMenu(1);
             setScreen(1);
             RecipesController.show();
             break;
         case "#blockstates":
-            title.html("Blockstates Editor");
+            title.html("Blockstate Editor");
             setMenu(2);
             setScreen(2);
             break;
         case "#advancements":
-            title.html("Advancements Editor");
+            title.html("Advancement Editor");
             setMenu(3);
             setScreen(3);
             break;
-        case "#models":
-            title.html("Model Viewer");
+        case "#loot":
+            title.html("Loot Table Editor");
             setMenu(4);
             setScreen(4);
+            break;
+        case "#models":
+            title.html("Model Viewer");
+            setMenu(5);
+            setScreen(5);
             ModelsController.init();
             break;
         case "#items":
             title.html("Item Viewer");
-            setMenu(5);
-            setScreen(5);
+            setMenu(6);
+            setScreen(6);
             ItemsController.init();
             break;
         case "#viewer":
             title.html("Texture Viewer");
-            setMenu(6);
-            setScreen(6);
+            setMenu(7);
+            setScreen(7);
             TexturesController.viewTextures();
             break;
         case "#tiler":
             title.html("Texture Tiler");
-            setMenu(7);
-            setScreen(7);
+            setMenu(8);
+            setScreen(8);
+            TexturesController.viewTiler();
+            break;
+        case "#analyzer":
+            title.html("Project Analyzer");
+            setMenu(9);
+            setScreen(9);
             TexturesController.viewTiler();
             break;
     }
@@ -71,5 +85,3 @@ function setScreen(screen) {
 function sleep(ms) {
     return new Promise(cb => setTimeout(cb, ms));
 }
-
-window.onhashchange = onHashChange;

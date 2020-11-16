@@ -40,7 +40,7 @@
         <div class="sidebar-sticky">
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link active" href="#languages">
+              <a class="nav-link" href="#languages">
                 <span data-feather="globe"></span>
                 Lanuages editor
               </a>
@@ -48,19 +48,25 @@
             <li class="nav-item">
               <a class="nav-link" href="#recipes">
                 <span data-feather="grid"></span>
-                Recipes editor
+                Recipe editor
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#blockstates">
                 <span data-feather="hexagon"></span>
-                Blockstates editor
+                Blockstate editor
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#advancements">
                 <span data-feather="bookmark"></span>
-                Advancements editor
+                Advancement editor
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#loot">
+                <span data-feather="loader"></span>
+                Loot Table editor
               </a>
             </li>
             <li class="nav-item">
@@ -85,6 +91,12 @@
               <a class="nav-link" href="#tiler">
                 <span data-feather="layers"></span>
                 Texture tiler
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link warning" href="#analyzer">
+                <span data-feather="alert-circle"></span>
+                Project analyzer
               </a>
             </li>
           </ul>
@@ -465,6 +477,9 @@
     </div>
   </div>
   <div class="screen">
+    <!-- Loot table editor -->
+  </div>
+  <div class="screen">
     <!-- Model viewer -->
     <div class="row m-0">
       <div class="col-md-7 col-sm-12 p-2">
@@ -474,7 +489,7 @@
       </div>
       <div class="col-md-5 col-sm-12 p-2">
         <div class="row card m-0 p-1">
-
+          <div id="model-viewer" style="cursor: grab;"></div>
         </div>
       </div>
     </div>
@@ -538,6 +553,31 @@
       </div>
     </div>
   </div>
+  <div class="screen">
+    <!-- Project Analyzer -->
+  </div>
+  <div class="screen">
+    <!-- Main screen -->
+    <div style="margin: 0px auto; max-width: 850px;">
+      <div class="row m-0">
+        <div class="col-md-12 card p-3">
+          <h5>Recent projects</h5>
+          <p class="m-0 mb-1">Select project to work on:</p>
+          <div class="row m-0 mt-2">
+            <div class="col-md-3 card p-2 mr-1 clickable">
+              ...
+            </div>
+          </div>
+          <div class="row m-0 mt-3">
+            <div class="col-md-12 p-0 m-0">
+              <p class="m-0 mb-2">or select new one</p>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="openProject()">Open Folder</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     window.jQuery = window.$ = require('jquery');
@@ -551,13 +591,13 @@
   <script src="./src/orbitControls.min.js"></script>
   <script src="./src/modelViewer.js"></script>
   <script src="./src/renderer.js"></script>
-  <script src="./src/controllers/menuController.js"></script>
   <script src="./src/controllers/languagesController.js"></script>
   <script src="./src/controllers/texturesController.js"></script>
   <script src="./src/controllers/recipesController.js"></script>
   <script src="./src/controllers/advancementsController.js"></script>
   <script src="./src/controllers/itemsController.js"></script>
   <script src="./src/controllers/modelsController.js"></script>
+  <script src="./src/controllers/menuController.js"></script>
 </body>
 
 </html>
