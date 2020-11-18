@@ -8,7 +8,7 @@ class ItemsController {
         container.empty();
         this.viewer = new ModelViewer(container[0]);
         window.addEventListener('resize', this.viewer.resize);
-        const virtContainer = document.createElement('div');;
+        const virtContainer = document.createElement('div');
         this.virtViewer = new ModelViewer(virtContainer, true, 150, 150);
         this.virtViewer.camera.position.set(0, 0, 40);
 

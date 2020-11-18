@@ -1,39 +1,42 @@
-function ModelViewer(container, isOrtho = false, width = 400, height = 400) {
+import { Mesh, NearestFilter, LinearFilter, Vector2, BoxGeometry, Color, MeshBasicMaterial, Group, MeshLambertMaterial, TextureLoader, Object3D, OrthographicCamera, PerspectiveCamera, Scene, AmbientLight, DirectionalLight, WebGLRenderer, Geometry, LineBasicMaterial, Vector3, LineSegments,  } from "three";
+import { OrbitControls } from 'three-orbitcontrols-ts';
+
+function ModelViewer(this: any, container: any, isOrtho = false, width = 400, height = 400) {
     this.element = container;
 
-    this.camera = isOrtho ? new THREE.OrthographicCamera(20 / -2, 20 / 2, 20 / 2, 20 / -2, 1, 1000) : new THREE.PerspectiveCamera(60, 1, 1, 1000);
+    this.camera = isOrtho ? new OrthographicCamera(20 / -2, 20 / 2, 20 / 2, 20 / -2, 1, 1000) : new PerspectiveCamera(60, 1, 1, 1000);
     this.camera.position.x = 16;
     this.camera.position.y = 16;
     this.camera.position.z = 32;
 
-    this.scene = new THREE.Scene();
+    this.scene = new Scene();
 
-    let light = new THREE.AmbientLight(0xffffff, 0.85);
-    this.scene.add(light);
-    light = new THREE.DirectionalLight(0xffffff, 0.4);
-    light.position.set(4, 10, 6);
-    this.scene.add(light);
+    let ambientLight = new AmbientLight(0xffffff, 0.85);
+    this.scene.add(ambientLight);
+    let dirLight = new DirectionalLight(0xffffff, 0.4);
+    dirLight.position.set(4, 10, 6);
+    this.scene.add(dirLight);
 
-    this.renderer = new THREE.WebGLRenderer({
+    this.renderer = new WebGLRenderer({
         antialias: true,
         alpha: true,
         preserveDrawingBuffer: true
     });
     this.renderer.setSize(width, height);
 
-    this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.2;
     this.controls.zoomSpeed = 1.4;
     this.controls.rotateSpeed = 0.6;
     this.controls.autoRotate = !isOrtho;
     this.controls.enableKeys = false;
-    this.controls.addEventListener('start', e => this.element.style.cursor = "grabbing");
-    this.controls.addEventListener('end', e => this.element.style.cursor = "grab");
+    this.controls.addEventListener('start', () => this.element.style.cursor = "grabbing");
+    this.controls.addEventListener('end', () => this.element.style.cursor = "grab");
 
     this.element.appendChild(this.renderer.domElement);
 
-    let self = this;
+    let self = this as any;
 
     this.draw = () => self.renderer.render(self.scene, self.camera);
 
@@ -41,6 +44,8 @@ function ModelViewer(container, isOrtho = false, width = 400, height = 400) {
         window.requestAnimationFrame(self.animate);
         self.controls.update();
         self.draw();
+        console.log(this.camera.rotation);
+        console.log(this.camera.position);
     };
 
     this.resize = () => {
@@ -54,7 +59,7 @@ function ModelViewer(container, isOrtho = false, width = 400, height = 400) {
 
     self = this;
 
-    this.load = (model) => {
+    this.load = (model: any) => {
         let name = model.modelName;
         if (Object.keys(self.models).indexOf(name) >= 0)
             throw new Error('Model "' + name + '" is already loaded.');
@@ -63,7 +68,7 @@ function ModelViewer(container, isOrtho = false, width = 400, height = 400) {
         return self;
     };
 
-    this.get = (name) => {
+    this.get = (name: string) => {
         if (!(Object.keys(self.models).indexOf(name) >= 0))
             throw new Error('Model "' + name + '" is not loaded.');
         return self.models[name];
@@ -71,7 +76,7 @@ function ModelViewer(container, isOrtho = false, width = 400, height = 400) {
 
     this.getAll = () => Object.keys(self.models).map((name) => self.models[name]);
 
-    this.remove = (name) => {
+    this.remove = (name: string) => {
         if (!(Object.keys(self.models).indexOf(name) >= 0))
             throw new Error('Model "' + name + '" is not loaded.');
         delete self.models[name];
@@ -98,7 +103,7 @@ function ModelViewer(container, isOrtho = false, width = 400, height = 400) {
         return self;
     };
 
-    this.hide = (name) => {
+    this.hide = (name: string) => {
         if (!(Object.keys(self.models).indexOf(name) >= 0))
             throw new Error('Model "' + name + '" is not loaded.');
         self.models[name].visible = false;
@@ -112,7 +117,7 @@ function ModelViewer(container, isOrtho = false, width = 400, height = 400) {
         return self;
     };
 
-    this.show = (name) => {
+    this.show = (name: string) => {
         if (!(Object.keys(self.models).indexOf(name) >= 0))
             throw new Error('Model "' + name + '" is not loaded.');
         self.models[name].visible = true;
@@ -128,29 +133,29 @@ function ModelViewer(container, isOrtho = false, width = 400, height = 400) {
 
     this.reset = () => self.controls.reset();
 
-    this.lookAt = (name) => {
+    this.lookAt = (name: string) => {
         let model = self.get(name);
         self.controls.target = model.getCenter();
     };
 
-    let gridGeometry = new THREE.Geometry();
-    let gridMaterial = new THREE.LineBasicMaterial({
+    let gridGeometry = new Geometry();
+    let gridMaterial = new LineBasicMaterial({
         color: 0xafafaf
     });
     for (let i = -8; i <= 8; i++) {
-        gridGeometry.vertices.push(new THREE.Vector3(-8, -8, i));
-        gridGeometry.vertices.push(new THREE.Vector3(8, -8, i));
-        gridGeometry.vertices.push(new THREE.Vector3(i, -8, -8));
-        gridGeometry.vertices.push(new THREE.Vector3(i, -8, 8));
+        gridGeometry.vertices.push(new Vector3(-8, -8, i));
+        gridGeometry.vertices.push(new Vector3(8, -8, i));
+        gridGeometry.vertices.push(new Vector3(i, -8, -8));
+        gridGeometry.vertices.push(new Vector3(i, -8, 8));
     }
 
-    gridGeometry.vertices.push(new THREE.Vector3(-1, -8, 9));
-    gridGeometry.vertices.push(new THREE.Vector3(1, -8, 9));
-    gridGeometry.vertices.push(new THREE.Vector3(1, -8, 9));
-    gridGeometry.vertices.push(new THREE.Vector3(0, -8, 10));
-    gridGeometry.vertices.push(new THREE.Vector3(0, -8, 10));
-    gridGeometry.vertices.push(new THREE.Vector3(-1, -8, 9));
-    let grid = new THREE.LineSegments(gridGeometry, gridMaterial);
+    gridGeometry.vertices.push(new Vector3(-1, -8, 9));
+    gridGeometry.vertices.push(new Vector3(1, -8, 9));
+    gridGeometry.vertices.push(new Vector3(1, -8, 9));
+    gridGeometry.vertices.push(new Vector3(0, -8, 10));
+    gridGeometry.vertices.push(new Vector3(0, -8, 10));
+    gridGeometry.vertices.push(new Vector3(-1, -8, 9));
+    let grid = new LineSegments(gridGeometry, gridMaterial);
     grid.visible = !isOrtho;
     this.scene.add(grid);
     this.grid = grid;
@@ -161,7 +166,7 @@ function ModelViewer(container, isOrtho = false, width = 400, height = 400) {
 
     this.hideGrid = () => self.grid.visible = false;
 
-    this.setGridColor = (color) => self.grid.material.color = new THREE.Color(color);
+    this.setGridColor = (color: string | number | Color | undefined) => self.grid.material.color = new Color(color);
 
     this.toImage = async () => {
         await sleep(100);
@@ -171,19 +176,19 @@ function ModelViewer(container, isOrtho = false, width = 400, height = 400) {
     this.animate();
 }
 
-function JsonModel(name, model, texturesReference, clipUVs) {
+function JsonModel(this: any, name: string, model: any, texturesReference: any, clipUVs: boolean) {
 
     if (clipUVs === undefined) clipUVs = true;
 
-    THREE.Object3D.call(this);
+    Object3D.call(this);
 
     this.modelName = name;
     this.animationLoop = true;
 
-    let textures = {};
-    let references = [];
-    let animated = [];
-    let animations = [];
+    let textures: any = {};
+    let references: string[] = [];
+    let animated: number[] = [];
+    let animations: any[] = [];
     if (model.hasOwnProperty('textures')) {
 
         Object.keys(model.textures).forEach((key, index) => {
@@ -199,8 +204,9 @@ function JsonModel(name, model, texturesReference, clipUVs) {
             if (reference.name == textureName) {
                 references.push(key);
                 if (reference.hasOwnProperty('mcmeta')) {
+                    let mcmeta;
                     try {
-                        let mcmeta = JSON.parse(reference.mcmeta);
+                        mcmeta = JSON.parse(reference.mcmeta);
                     } catch (e) {
                         throw new Error('Couldn\'t parse mcmeta for texture "' + textureName + '". ' + e.message + '.');
                     }
@@ -223,7 +229,7 @@ function JsonModel(name, model, texturesReference, clipUVs) {
                     let frametime = mcmeta.animation.frametime || 1;
                     let animation = [];
                     for (let i = 0; i < frames.length; i++) {
-                        frame = frames[i];
+                        let frame = frames[i];
                         if (typeof frame == 'number') {
                             animation.push({
                                 index: frame,
@@ -251,7 +257,7 @@ function JsonModel(name, model, texturesReference, clipUVs) {
                         canvas.width = width;
                         canvas.height = width;
                         let ctx = canvas.getContext('2d');
-                        ctx.drawImage(imageBuffer, 0, -i * width);
+                        ctx!.drawImage(imageBuffer, 0, -i * width);
                         images.push(canvas.toDataURL('image/png'));
                     }
                     textures[key] = images;
@@ -271,11 +277,11 @@ function JsonModel(name, model, texturesReference, clipUVs) {
     let materials = [];
     references.forEach((ref, index) => {
         let image = textures[ref] instanceof Array ? textures[ref][0] : textures[ref];
-        let loader = new THREE.TextureLoader();
+        let loader = new TextureLoader();
         let texture = loader.load(image);
-        texture.magFilter = THREE.NearestFilter;
-        texture.minFilter = THREE.LinearFilter;
-        let mat = new THREE.MeshLambertMaterial({
+        texture.magFilter = NearestFilter;
+        texture.minFilter = LinearFilter;
+        let mat = new MeshLambertMaterial({
             map: texture,
             transparent: true,
             alphaTest: 0.5
@@ -288,7 +294,7 @@ function JsonModel(name, model, texturesReference, clipUVs) {
                 let animateTexture = () => {
                     let frame = animation.frames[animation.currentFrame]
                     try {
-                        material.map.image.src = images[frame.index]
+                        material.map!.image.src = images[frame.index]
                         animation.currentFrame = animation.currentFrame < animation.frames.length - 1 ? animation.currentFrame + 1 : 0
                     } catch (e) {
                         console.log(e.message)
@@ -302,7 +308,7 @@ function JsonModel(name, model, texturesReference, clipUVs) {
             })(mat, images, animation)
         }
     })
-    let transparentMaterial = new THREE.MeshBasicMaterial({
+    let transparentMaterial = new MeshBasicMaterial({
         transparent: true,
         opacity: 0,
         alphaTest: 0.5
@@ -318,8 +324,8 @@ function JsonModel(name, model, texturesReference, clipUVs) {
         throw new Error('Couldn\'t find "elements" property')
     }
 
-    let group = new THREE.Group()
-    elements.forEach((element, index) => {
+    let group = new Group()
+    elements.forEach((element: { [x: string]: any[]; hasOwnProperty: any; faces: any; rotation: any; }, index: string) => {
 
         if (!element.hasOwnProperty('from'))
             throw new Error('Couldn\'t find "from" property for element "' + index + '".')
@@ -350,7 +356,7 @@ function JsonModel(name, model, texturesReference, clipUVs) {
         }
 
         let fix = 0.001
-        let geometry = new THREE.BoxGeometry(width + fix, height + fix, length + fix)
+        let geometry = new BoxGeometry(width + fix, height + fix, length + fix)
         geometry.faceVertexUvs[0] = []
 
         if (element.hasOwnProperty('faces')) {
@@ -377,7 +383,7 @@ function JsonModel(name, model, texturesReference, clipUVs) {
                     let uv = element.faces[face].uv
 
                     if (clipUVs) {
-                        uv.forEach((e, pos) => {
+                        uv.forEach((e: string, pos: string) => {
                             if (typeof e != 'number') throw new Error('The "uv" property for "' + face + '" face in element "' + index + '" is invalid (got "' + e + '" at index "' + pos + '").')
                         })
                         uv.map((e) => {
@@ -390,7 +396,7 @@ function JsonModel(name, model, texturesReference, clipUVs) {
                             }
                         })
                     } else {
-                        uv.forEach((e, pos) => {
+                        uv.forEach((e: string | number, pos: string) => {
                             if (typeof e != 'number' || e + 0.00001 < 0 || e - 0.00001 > 16) throw new Error('The "uv" property for "' + face + '" face in element "' + index + '" is invalid (got "' + e + '" at index "' + pos + '").')
                         })
                     }
@@ -402,10 +408,10 @@ function JsonModel(name, model, texturesReference, clipUVs) {
                     uv[2] -= 0.0005
                     uv[3] -= 0.0005
                     let map = [
-                        new THREE.Vector2(uv[0], 1 - uv[1]),
-                        new THREE.Vector2(uv[0], 1 - uv[3]),
-                        new THREE.Vector2(uv[2], 1 - uv[3]),
-                        new THREE.Vector2(uv[2], 1 - uv[1])
+                        new Vector2(uv[0], 1 - uv[1]),
+                        new Vector2(uv[0], 1 - uv[3]),
+                        new Vector2(uv[2], 1 - uv[3]),
+                        new Vector2(uv[2], 1 - uv[1])
                     ]
                     if (element.faces[face].hasOwnProperty('rotation')) {
                         let amount = element.faces[face].rotation
@@ -424,10 +430,10 @@ function JsonModel(name, model, texturesReference, clipUVs) {
                     geometry.faces[i * 2].materialIndex = references.length
                     geometry.faces[i * 2 + 1].materialIndex = references.length
                     let map = [
-                        new THREE.Vector2(0, 0),
-                        new THREE.Vector2(1, 0),
-                        new THREE.Vector2(1, 1),
-                        new THREE.Vector2(0, 1)
+                        new Vector2(0, 0),
+                        new Vector2(1, 0),
+                        new Vector2(1, 1),
+                        new Vector2(0, 1)
                     ]
                     geometry.faceVertexUvs[0][i * 2] = [map[0], map[1], map[3]]
                     geometry.faceVertexUvs[0][i * 2 + 1] = [map[1], map[2], map[3]]
@@ -435,7 +441,7 @@ function JsonModel(name, model, texturesReference, clipUVs) {
             }
         }
 
-        let mesh = new THREE.Mesh(geometry, material)
+        let mesh = new Mesh(geometry, material)
         mesh.position.x = origin.x
         mesh.position.y = origin.y
         mesh.position.z = origin.z
@@ -463,7 +469,7 @@ function JsonModel(name, model, texturesReference, clipUVs) {
             let axis = element.rotation.axis
             let angle = element.rotation.angle
 
-            let pivot = new THREE.Group()
+            let pivot = new Group()
             pivot.position.x = rotationOrigin.x
             pivot.position.y = rotationOrigin.y
             pivot.position.z = rotationOrigin.z
@@ -482,7 +488,7 @@ function JsonModel(name, model, texturesReference, clipUVs) {
 
             group.add(pivot)
         } else {
-            let pivot = new THREE.Group()
+            let pivot = new Group()
             pivot.add(mesh)
 
             group.add(pivot)
@@ -549,14 +555,14 @@ function JsonModel(name, model, texturesReference, clipUVs) {
             }
         }
 
-        return new THREE.Vector3(
+        return new Vector3(
             (box.minx + box.maxx) / 2,
             (box.miny + box.maxy) / 2,
             (box.minz + box.maxz) / 2
         );
     }
 
-    this.applyDisplay = (option) => {
+    this.applyDisplay = (option: string) => {
         let group = self.children[0];
         if (option == 'block') {
             group.rotation.set(0, 0, 0);
@@ -576,5 +582,9 @@ function JsonModel(name, model, texturesReference, clipUVs) {
     }
 }
 
-JsonModel.prototype = Object.create(THREE.Object3D.prototype);
+function sleep(ms: number) {
+    return new Promise(cb => setTimeout(cb, ms));
+}
+
+JsonModel.prototype = Object.create(Object3D.prototype);
 JsonModel.prototype.constructor = JsonModel;

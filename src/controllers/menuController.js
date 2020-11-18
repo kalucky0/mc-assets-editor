@@ -87,7 +87,3 @@ function setScreen(screen) {
     buttons.empty();
     content.html(screens.eq(screen).html());
 }
-
-function sleep(ms) {
-    return new Promise(cb => setTimeout(cb, ms));
-}
