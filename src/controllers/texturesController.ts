@@ -1,10 +1,14 @@
+import { isShiftPressed, textures } from "../renderer";
+import LazyLoad from "vanilla-lazyload";
+import * as $ from "jquery";
+
 const lazyLoadInstance = new LazyLoad();
 
-class TexturesController {
-    static generateHTML = require('./src/controllers/textureSingleView');
-    tiledTextures = [0];
+export class TexturesController {
+    // static generateHTML = require('./src/controllers/textureSingleView');
+    static tiledTextures: number[] = [0];
 
-    static viewTextures() {
+    static viewTextures(buttons: any) {
         buttons.empty();
         const viewtxt = $("#view-txt").first();
         viewtxt.empty();
@@ -22,12 +26,12 @@ class TexturesController {
 
         for (let i = 0; i < textures.length; i++) {
             $(`#textureListItem-${i}`).on('click', async () => {
-                await this.generateHTML(textures[i])
+                // await this.generateHTML(textures[i])
             });
         }
     }
 
-    static viewTiler() {
+    static viewTiler(buttons: any) {
         buttons.html(`<button class="btn btn-sm btn-outline-secondary" onclick="TexturesController.shuffleTiles()">Shuffle</button>
     <button class="btn btn-sm btn-outline-secondary" onclick="TexturesController.rotateTiles()">Randomize rotation</button>`);
         const viewtxt = $("#tiler-textures").first();
@@ -41,7 +45,7 @@ class TexturesController {
         lazyLoadInstance.update();
     }
 
-    static chooseBlock(i) {
+    static chooseBlock(i: number) {
         const tiler = $("#tiler").first();
         tiler.empty();
         if (isShiftPressed) {

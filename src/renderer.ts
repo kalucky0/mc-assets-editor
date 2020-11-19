@@ -1,21 +1,25 @@
+import { ipcRenderer, shell } from 'electron';
+import * as $ from "jquery";
+import * as feather from "feather-icons";
+import * as open from 'open';
+import * as path from 'path';
+import { onHashChange } from './controllers/menuController';
+
 const darkmodeToggle = $("#darkmode-toggle").first();
-const ipcRenderer = require('electron').ipcRenderer;
-const buttons = $("#buttons-bar").first();
-const shell = require("electron").shell;
-const path = require('path');
-const open = require('open');
-let isShiftPressed = false;
-let languageFiles = [];
-let textures = [];
-let json = [];
+
+export let isShiftPressed: boolean = false;
+export let languageFiles: { path: any; }[] = [];
+export let textures: any[] = [];
+export let json: any[] = [];
+
 feather.replace();
 
-function openProject(path = undefined) {
-    ipcRenderer.invoke('open-project', path).then((result) => {
+function openProject(projectPath: string | undefined = undefined) {
+    ipcRenderer.invoke('open-project', projectPath).then((result) => {
         if (result === null) return;
         textures = result.textures;
         json = result.json;
-        languageFiles = json.filter(e => e.path.includes("lang"));
+        languageFiles = json.filter((e: any) => e.path.includes("lang"));
         $('#open-lang-folder').on('click', () => {
             open("file://" + path.dirname(languageFiles[0].path));
         });
@@ -23,7 +27,7 @@ function openProject(path = undefined) {
         location.hash = "#languages";
 
         let recents = localStorage.recent === undefined ? [] : JSON.parse(localStorage.recent);
-        if (!recents.some(e => e.path == result.path)) {
+        if (!recents.some((e: any) => e.path == result.path)) {
             recents.push({
                 name: result.name,
                 path: result.path
@@ -33,11 +37,11 @@ function openProject(path = undefined) {
     });
 }
 
-window.onkeydown = e => {
+window.onkeydown = (e: any) => {
     if (e.key === "Shift") isShiftPressed = true;
 };
 
-window.onkeyup = e => {
+window.onkeyup = (e: any) => {
     if (e.key === "Shift") isShiftPressed = false;
 };
 

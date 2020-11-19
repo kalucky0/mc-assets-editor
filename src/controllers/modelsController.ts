@@ -1,14 +1,17 @@
-class ModelsController {
+import { ModelViewer, JsonModel } from "../modelViewer";
+import { json, textures } from "../renderer";
 
-    viewer;
-    virtViewer;
+export class ModelsController {
+
+    static viewer: any;
+    static virtViewer: any;
 
     static init() {
         const container = $("#model-viewer");
-        this.viewer = new ModelViewer(container[0], true);
+        this.viewer = new (ModelViewer as any)(container[0], true);
         window.addEventListener('resize', this.viewer.resize);
         const virtContainer = document.createElement('div');;
-        this.virtViewer = new ModelViewer(virtContainer, true, 150, 150);
+        this.virtViewer = new (ModelViewer as any)(virtContainer, true, 150, 150);
         this.viewer.camera.position.set(0, 0, 40);
 
         (async () => {
@@ -30,7 +33,7 @@ class ModelsController {
         })();
     }
 
-    static async showModel(i) {
+    static async showModel(i: number) {
         const blockModels = json.filter(e => e.path.includes("models") && e.path.includes("block"));
         const blockTextures = textures.filter(e => e.path.includes("block")).map(e => {return {'name': e.name.split('.')[0], 'texture': e.path}});
         console.log(blockTextures);
@@ -39,15 +42,15 @@ class ModelsController {
         this.renderModel(blockModels[i].name, model, blockTextures);
     }
 
-    static renderModel(name, json, txt) {
+    static renderModel(name: string, json: any, txt: { name: any; texture: any; }[]) {
         this.viewer.removeAll();
-        const model = new JsonModel(name, json, txt)
+        const model = new (JsonModel as any)(name, json, txt)
         model.applyDisplay("ground");
         this.viewer.load(model);
     }
 
-    static async renderIcon(name, json, txt) {
-        const model = new JsonModel(name, json, txt)
+    static async renderIcon(name: any, json: any, txt: { name: any; texture: any; }[]) {
+        const model = new (JsonModel as any)(name, json, txt)
         model.applyDisplay("gui");
         this.virtViewer.load(model);
         return await this.virtViewer.toImage();

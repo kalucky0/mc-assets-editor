@@ -1,7 +1,15 @@
 import { Mesh, NearestFilter, LinearFilter, Vector2, BoxGeometry, Color, MeshBasicMaterial, Group, MeshLambertMaterial, TextureLoader, Object3D, OrthographicCamera, PerspectiveCamera, Scene, AmbientLight, DirectionalLight, WebGLRenderer, Geometry, LineBasicMaterial, Vector3, LineSegments,  } from "three";
 import { OrbitControls } from 'three-orbitcontrols-ts';
 
-function ModelViewer(this: any, container: any, isOrtho = false, width = 400, height = 400) {
+declare global {
+    interface Window {
+        children:any[];
+        displayOptions:any[];
+        animationLoop: boolean | undefined;
+    }
+}
+
+export function ModelViewer(this: any, container: any, isOrtho = false, width = 400, height = 400) {
     this.element = container;
 
     this.camera = isOrtho ? new OrthographicCamera(20 / -2, 20 / 2, 20 / 2, 20 / -2, 1, 1000) : new PerspectiveCamera(60, 1, 1, 1000);
@@ -81,10 +89,9 @@ function ModelViewer(this: any, container: any, isOrtho = false, width = 400, he
             throw new Error('Model "' + name + '" is not loaded.');
         delete self.models[name];
         for (let i = 0; i < self.scene.children.length; i++) {
-            let child = self.scene.children[i];
-            if (child instanceof JsonModel && child.modelName == name) {
-                child.animationLoop = false;
-                self.scene.remove(child);
+            if (self.scene.children[i] instanceof JsonModel && self.scene.children[i].modelName == name) {
+                self.scene.children[i].animationLoop = false;
+                self.scene.remove(self.scene.children[i]);
                 break;
             }
         }
@@ -93,10 +100,9 @@ function ModelViewer(this: any, container: any, isOrtho = false, width = 400, he
 
     this.removeAll = () => {
         for (let i = self.scene.children.length - 1; i >= 0; i--) {
-            let child = self.scene.children[i];
-            if (child instanceof JsonModel) {
-                child.animationLoop = false;
-                self.scene.remove(child);
+            if (self.scene.children[i] instanceof JsonModel) {
+                self.scene.children[i].animationLoop = false;
+                self.scene.remove(self.scene.children[i]);
             }
         }
         self.models = {};
@@ -176,7 +182,7 @@ function ModelViewer(this: any, container: any, isOrtho = false, width = 400, he
     this.animate();
 }
 
-function JsonModel(this: any, name: string, model: any, texturesReference: any, clipUVs: boolean) {
+export function JsonModel(this: any, name: string, model: any, texturesReference: any, clipUVs: boolean) {
 
     if (clipUVs === undefined) clipUVs = true;
 
@@ -386,7 +392,7 @@ function JsonModel(this: any, name: string, model: any, texturesReference: any, 
                         uv.forEach((e: string, pos: string) => {
                             if (typeof e != 'number') throw new Error('The "uv" property for "' + face + '" face in element "' + index + '" is invalid (got "' + e + '" at index "' + pos + '").')
                         })
-                        uv.map((e) => {
+                        uv.map((e: number) => {
                             if (e + 0.00001 < 0) {
                                 return 0
                             } else if (e - 0.00001 > 16) {
@@ -400,7 +406,7 @@ function JsonModel(this: any, name: string, model: any, texturesReference: any, 
                             if (typeof e != 'number' || e + 0.00001 < 0 || e - 0.00001 > 16) throw new Error('The "uv" property for "' + face + '" face in element "' + index + '" is invalid (got "' + e + '" at index "' + pos + '").')
                         })
                     }
-                    uv = uv.map((e) => {
+                    uv = uv.map((e: number) => {
                         return e / 16
                     })
                     uv[0] += 0.0005
@@ -562,7 +568,7 @@ function JsonModel(this: any, name: string, model: any, texturesReference: any, 
         );
     }
 
-    this.applyDisplay = (option: string) => {
+    this.applyDisplay = (option: any) => {
         let group = self.children[0];
         if (option == 'block') {
             group.rotation.set(0, 0, 0);
